@@ -19,12 +19,11 @@ code {
     display: flex;
     justify-content: right;
     align-items: right;
-    color: 	#00bed4;
     font-size: 5em;
 }
 
 .repo {
-    color: #005398;
+    
     font-size: 2em;
     justify-content: left;
     align-items: left;
@@ -33,10 +32,6 @@ code {
     
 }
 
-repo:hover {
-    font-size: 3em;
-    transition: .75s;
-}
 
 .repos {
     width: 100%;
@@ -44,7 +39,6 @@ repo:hover {
     display: flex;
     justify-content: left;
     align-items: left;
-    color: 	#00bed4;
     font-size: 2em;
 }
 
@@ -64,4 +58,11 @@ socials {
 .twitter {
     height: 25px;
     width: auto;
+}
+
+.nametag {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 5em;
 }
