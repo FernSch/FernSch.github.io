@@ -7,14 +7,19 @@
 </head>
 <body>
 	<script>
+		function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 		$('body').terminal({
 			help: function() {
+				await sleep(2000);
 				this.echo('Available commands: help, about, socials');
 				this.echo('help: runs this command');
 				this.echo('about: tells you about me!');
 				this.echo('socials: drops the social links!');
 			},
 			about: function() {
+				await sleep(2000);
 				this.echo('About me:');
 				this.echo('Hi! Im Fern Schoenberg!');
 				this.echo('https://www.github.com/FernSch');
@@ -22,6 +27,7 @@
 				this.echo(img);
 			},
 			socials: function() {
+				await sleep(2000);
 				this.echo('https://www.github.com/FernSch');
 				this.echo('https://www.instagram.com/fern_sux');
 				this.echo('https://www.twitter.com/fern_sucks');				
