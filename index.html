@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>FernSch.github.io</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <br>
-        <div id="clock" class="clock" onload="currentTime()"></div>
-        <h1 id="repos" class="repos" >Number of Github Repos</h1>
-
-        <div id="repo" class="repo" onload="getLength()" href="https://github.com/FernSch?tab=repositories"></div>
-        <socials>
-            <a href="https://instagram.com/fern_sux" target="_blank">
-                <img src="instagram.svg" class="instagram">
-            </a>
-            <a href="https://twitter.com/fern_sucks" target="_blank">
-                <img src="twitter.svg" class="twitter">
-                </a>
-                <a href="https://github.com/FernSch" target="_blank">
-                    <img src="github.svg" class="twitter">
-                    </a>
-        </socials>
-
-        <h1 class="nametag" id="nametag">Hi! Im Fern</h1>
-    </br>
-        <script src="script.js" async defer></script>
-        
-    </body>
+<head>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://unpkg.com/jquery.terminal/js/jquery.terminal.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/jquery.terminal/css/jquery.terminal.min.css"/>
+</head>
+<body>
+	<script>
+		$('body').terminal({
+			help: function() {
+				this.echo('Available commands: help, about, socials');
+				this.echo('help: runs this command');
+				this.echo('about: tells you about me!');
+				this.echo('socials: drops the social links!');
+			},
+			about: function() {
+				const img = $('<img src="' + 561 + '/' + 600 + '">');
+				this.echo('About me:');
+				this.echo('Hi! Im Fern Schoenberg!');
+				this.echo('https://www.github.com/FernSch');
+			},
+			socials: function() {
+				this.echo('https://www.github.com/FernSch');
+				this.echo('https://www.instagram.com/fern_sux');
+				this.echo('https://www.twitter.com/fern_sucks');				
+				
+			}
+			},
+ 		{
+			greetings: 'Welcome to my terminal. Try typing help'
+		});
+	</script>
+</body>
 </html>
