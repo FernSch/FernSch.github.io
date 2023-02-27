@@ -6,31 +6,6 @@
 <link rel="stylesheet" href="https://unpkg.com/jquery.terminal/css/jquery.terminal.min.css"/>
 </head>
 <body>
-	<script>
-		$('body').terminal({
-			help: function() {
-				this.echo('Available commands: help, about, socials');
-				this.echo('help: runs this command');
-				this.echo('about: tells you about me!');
-				this.echo('socials: drops the social links!');
-			},
-			about: function() {
-				const img = $('<img src="https://imgur.com/a/37vNZ3V">');
-				this.echo('About me:');
-				this.echo('Hi! Im Fern Schoenberg!');
-				this.echo('https://www.github.com/FernSch');
-				this.echo(img);
-			},
-			socials: function() {
-				this.echo('https://www.github.com/FernSch');
-				this.echo('https://www.instagram.com/fern_sux');
-				this.echo('https://www.twitter.com/fern_sucks');				
-				
-			}
-			},
- 		{
-			greetings: 'Welcome to my terminal. Try typing help'
-		});
-	</script>
+	
 </body>
 </html>
