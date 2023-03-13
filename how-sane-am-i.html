@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>How sane are you?</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <center>
+        <h1 id="sanemeter" style="color:white; text-align: middle;"></h1>
+    </center>
+
+   	<div class="gauge gauge--liveupdate" id="gauge">
+        <div class="gauge__container">
+            <div class="gauge__marker"></div>
+            <div class="gauge__background"></div>
+            <div class="gauge__center"></div>
+            <div class="gauge__data"></div>
+            <div class="gauge__needle"></div>
+        </div>
+        <div class="gauge__labels mdl-typography__headline">
+            <span class="gauge__label--low">None</span>
+            <span class="gauge__label--spacer"></span>
+            <span class="gauge__label--high">Full</span>
+        </div>
+    </div>
+    <script src="material-gauge.js"></script>
+    <script>
+        var num = Math.floor(Math.random() * 100)
+        document.getElementById("sanemeter").innerHTML = num;
+        var gauge = new Gauge(document.getElementById("gauge"));
+
+        gauge.value(num/100);
+
+    </script>
+    </body>
+</html>
