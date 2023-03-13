@@ -25,6 +25,10 @@
     </div>
     <script src="material-gauge.js"></script>
     <script>
+        var keys = window.location.search;
+        name = new URLSearchParams(keys);
+        document.getElementByID("name") = "How sane are you " + name.get('name') + "?";
+
         var num = Math.floor(Math.random() * 100)
         document.getElementById("sanemeter").innerHTML = num;
         var gauge = new Gauge(document.getElementById("gauge"));
