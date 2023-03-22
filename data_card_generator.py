@@ -10,7 +10,7 @@ team_num = 2056
 year = datetime.now().strftime("%Y")
 white = (255,255,255)
 black = (0,0,0)
-img = Image.open("template.png")
+img = Image.open("Asset 3.png")
 title_font = ImageFont.truetype('Europa Regular.ttf', 50)
 small_font = ImageFont.truetype('Europa Regular.ttf', 25)
 
