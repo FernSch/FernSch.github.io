@@ -22,7 +22,7 @@
 	  <center>
 		  <form id="team_form"onsumbit="return false">
 		  <input type="number" min=1 max=9999>
-			  <input type="submit" pys-onClick="save_image(document.getElementById("team_num_data").value;)"value="Submit" label="team number" id="team_num_data">
+			  <input type="submit" pys-onClick="save_image()"value="Submit" label="team number" id="team_num_data">
 			  <form>
 				  
 	<script>
@@ -30,7 +30,7 @@
 		function runPythonScript()
 		{
 			
-			const exp = pyodideGlobals.get('save_image(document.getElementById("team_form").value;)');
+			var num = document.getElemnetByID('team_num_data');
 		}
 		
 				  </script>
@@ -46,7 +46,8 @@ from PIL import Image, ImageFont, ImageDraw
 import random
 from datetime import datetime
 
-def save_image(num):
+def save_image():
+	from js import num				  
 	#enter team num
 	team_num = num
 
