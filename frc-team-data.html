@@ -20,9 +20,9 @@
   <h1 style="color: white;">FRC Team Data Card Generator</h1>
 		  <h2 style="color: white;">Generate a Data card for an FRC team, based on statbotics</h2>
 	  <center>
-		  <form id="team_form"onsumbit="runPythonScript()">
+		  <form id="team_form"onsumbit="return false">
 		  <input type="number" min=1 max=9999>
-			  <input type="submit" value="Submit" label="team number">
+			  <input type="submit" pys-onClick="save_image(document.getElementById("team_form").value;)"value="Submit" label="team number" id="team_num_data">
 			  <form>
 				  
 	<script>
