@@ -20,7 +20,7 @@
   <h1 style="color: white;">FRC Team Data Card Generator</h1>
 		  <h2 style="color: white;">Generate a Data card for an FRC team, based on statbotics</h2>
 	  <center>
-		  <form onsubmit="runPythonScript()">
+		  <form id="team_form"onsumbit="runPythonScript()">
 		  <input type="number" min=1 max=9999>
 			  <input type="submit" value="Submit" label="team number">
 			  <form>
@@ -30,7 +30,7 @@
 		function runPythonScript()
 		{
 			
-			const exp = pyodideGlobals.get('save_image');
+			const exp = pyodideGlobals.get('save_image(document.getElementById("team_form").value;)');
 		}
 		
 				  </script>
@@ -46,9 +46,9 @@ from PIL import Image, ImageFont, ImageDraw
 import random
 from datetime import datetime
 
-def save_image():
+def save_image(num):
 	#enter team num
-	team_num = 2056
+	team_num = num
 
 	year = datetime.now().strftime("%Y")
 	white = (255,255,255)
