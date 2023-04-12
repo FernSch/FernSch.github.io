@@ -30,7 +30,7 @@ const apiUrl = "https://api.statbotics.io/v2/team/";
 
 form.addEventListener("submit", function(event) {
   event.preventDefault();
-  const teamNumber = form.elements["team_number"].value;
+  const teamNumber = form.value;
   const url = apiUrl + teamNumber;
   
   fetch(url)
@@ -44,6 +44,7 @@ form.addEventListener("submit", function(event) {
       console.error(error);
     });
 });
+
 
 				  </script>
 				  
