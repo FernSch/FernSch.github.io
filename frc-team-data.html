@@ -1,68 +1,75 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
     <title>FRC Team Data Card Generator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <style>
-      #team-image {
-        background-color: black;
-        color: white;
-        font-size: 2em;
-        text-align: center;
-        padding: 1em;
-        width: 30%;
-        margin: auto;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>FRC Team Data Card Generator</h1>
-    <h2>Generate a Data card for an FRC team, based on statbotics</h2>
-    <form id="team-form">
+    <h2>Generate a Data card for an FRC team, based on Statbotics</h2>
+    <form>
       <label for="team_num_data">Team Number:</label>
-      <input type="text" id="team_num_data" name="team_num_data" required>
-      <button type="submit">Submit</button>
+      <input type="text" id="team_num_data" name="team_num_data"><br><br>
+      <input type="submit" value="Submit">
     </form>
-    <div id="team-data"></div>
-    <div id="team-image"></div>
+    <div id="team-data-card"></div>
     <script>
-      const form = document.getElementById('team-form');
+      const teamNumData = document.getElementById('team_num_data');
+      const teamDataCard = document.getElementById('team-data-card');
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
+      const urlParams = new URLSearchParams(window.location.search);
+      const teamNum = urlParams.get('team');
+      if (teamNum) {
+        teamNumData.value = teamNum;
+        getTeamData(teamNum);
+      }
 
-        const teamNum = document.getElementById('team_num_data').value;
-        const apiUrl = `https://api.statbotics.io/v2/team/${teamNum}`;
-
-        fetch(apiUrl)
+      function getTeamData(team) {
+        fetch(`https://api.statbotics.io/v2/team/${team}`)
           .then(response => response.json())
           .then(data => {
-            const teamDataDiv = document.getElementById('team-data');
-            const list = document.createElement('ul');
-
-            for (const [key, value] of Object.entries(data)) {
-              const listItem = document.createElement('li');
-              const formattedKey = key.replace('_', ' ');
-              listItem.textContent = `${formattedKey}: ${value}`;
-              list.appendChild(listItem);
+            if (data.error) {
+              teamDataCard.innerText = data.error;
+              return;
             }
-
-            teamDataDiv.innerHTML = '';
-            teamDataDiv.appendChild(list);
-
-            const teamImageDiv = document.getElementById('team-image');
-            const teamName = data.team_name;
-            const teamNumber = data.team_number;
-            const country = data.country;
-            const rookieYear = data.rookie_year;
-            const fullWinRate = data.full_win_rate;
-            const teamImage = document.createElement('div');
-            teamImage.textContent = `${teamName} ${teamNumber}\n${country}, Rookie Year: ${rookieYear}, Full Win Rate: ${fullWinRate}`;
-            teamImageDiv.innerHTML = '';
-            teamImageDiv.appendChild(teamImage);
+            const { name, country, rookie_year, winrate } = data.team;
+            const fullWinrate = `${(winrate * 100).toFixed(2)}%`;
+            const img = generateTeamCard(name, team, country, rookie_year, fullWinrate);
+            teamDataCard.innerHTML = '';
+            teamDataCard.appendChild(img);
           })
-          .catch(error => console.error(error));
+          .catch(error => {
+            teamDataCard.innerText = `Error: ${error.message}`;
+          });
+      }
+
+      function generateTeamCard(name, team, country, rookie_year, fullWinrate) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 900;
+        canvas.height = 300;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#FFF';
+        ctx.font = 'bold 70px Arial';
+        ctx.fillText(`${name} ${team}`, 50, 100);
+        ctx.font = '30px Arial';
+        ctx.fillText(`Country: ${country}`, 50, 200);
+        ctx.fillText(`Rookie Year: ${rookie_year}`, 50, 240);
+        ctx.fillText(`Full Winrate: ${fullWinrate}`, 50, 280);
+        const img = document.createElement('img');
+        img.src = canvas.toDataURL();
+        img.alt = `${name} ${team}`;
+        return img;
+      }
+
+      const form = document.querySelector('form');
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        const team = teamNumData.value;
+        const params = new URLSearchParams({ team });
+        history.pushState(null, '', `?${params.toString()}`);
+        getTeamData(team);
       });
     </script>
   </body>
