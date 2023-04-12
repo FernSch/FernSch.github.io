@@ -1,49 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
     <title>FRC Team Data Card Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
     <h1>FRC Team Data Card Generator</h1>
-
+    <h2>Generate a Data card for an FRC team, based on statbotics</h2>
+    <form>
+      <label for="team_num_data">Team Number:</label>
+      <input type="text" id="team_num_data" name="team_num_data" required>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="team-data"></div>
     <script>
-      // Get the value of the "team" variable from the URL
       const urlParams = new URLSearchParams(window.location.search);
-      const teamNumber = urlParams.get('team');
+      const teamNum = urlParams.get('team');
 
-      // If no team number is passed in through the URL, display a message
-      if (!teamNumber) {
-        const message = document.createElement("p");
-        message.textContent = "Please provide a team number in the URL: FernSch.github.io/frc-team-data?team={team}";
-        document.body.appendChild(message);
+      if (!teamNum) {
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = 'You must pass in a team number through the URL in the format: FernSch.github.io/frc-team-data?team={team}';
+        document.body.appendChild(errorDiv);
       } else {
-        // Update the HTML with the team number
-        const teamNumberSpan = document.createElement("span");
-        teamNumberSpan.textContent = teamNumber;
-        document.body.appendChild(document.createElement("h2").appendChild(document.createTextNode("Team ")).appendChild(teamNumberSpan).appendChild(document.createTextNode(" Information")));
+        const apiUrl = `https://api.statbotics.io/v2/team/${teamNum}`;
 
-        // Construct the API URL and fetch the team data
-        const apiUrl = "https://api.statbotics.io/v2/team/";
-        const url = apiUrl + teamNumber;
-        fetch(url)
+        fetch(apiUrl)
           .then(response => response.json())
           .then(data => {
-            // Update the HTML with the team data
-            const teamDataList = document.createElement("ul");
-            document.body.appendChild(teamDataList);
+            const teamDataDiv = document.getElementById('team-data');
+            const list = document.createElement('ul');
 
             for (const [key, value] of Object.entries(data)) {
-              const listItem = document.createElement("li");
-              listItem.innerHTML = "<strong>" + key.replace("_", " ") + ":</strong> " + value;
-              teamDataList.appendChild(listItem);
+              const listItem = document.createElement('li');
+              const formattedKey = key.replace('_', ' ');
+              listItem.textContent = `${formattedKey}: ${value}`;
+              list.appendChild(listItem);
             }
+
+            teamDataDiv.appendChild(list);
           })
-          .catch(error => {
-            // Handle any errors that occurred during the fetch
-            console.error(error);
-          });
+          .catch(error => console.error(error));
       }
     </script>
   </body>
