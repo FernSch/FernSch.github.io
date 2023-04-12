@@ -50,6 +50,16 @@
         return pastel;
       }
     </script>
+	<style>
+		.team_num_data_button {
+			border-radius: 15px;
+			color: white;
+			
+		}
+		
+		
+		
+	</style>
   </head>
   <body>
     <h1>FRC Team Data Card Generator</h1>
@@ -57,7 +67,7 @@
     <form onsubmit="event.preventDefault(); generateCard();">
       <label for="team_num_data">Team Number (1-9999):</label>
       <input type="number" id="team_num_data" name="team_num_data" min="1" max="9999" required>
-      <input type="submit" value="Generate">
+      <input type="submit" value="Generate" id="team_num_data_button">
     </form>
     <div id="team_card_container"></div>
     <canvas id="team_card"></canvas>
