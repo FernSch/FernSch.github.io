@@ -24,6 +24,14 @@
             const country = data["country"];
             const rookieYear = data["rookie_year"];
             const fullWinRate = (Math.round((data['full_winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";
+		       
+		if (teamNumber == "undefined" )
+		{
+		
+			teamNumber = "Team Not Found!";
+			
+		}
+		       
             ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
             ctx.font = "bold 32px Arial";
             ctx.fillText(`Country: ${country}`, 30, 160);
