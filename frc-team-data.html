@@ -23,7 +23,7 @@
             const teamNumber = data["team"];
             const country = data["country"];
             const rookieYear = data["rookie_year"];
-            const fullWinRate = data['full_winrate'];
+            const fullWinRate = (data['full_winrate'] * 100).toString() + "%";
             ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
             ctx.font = "bold 32px Arial";
             ctx.fillText(`Country: ${country}`, 30, 160);
