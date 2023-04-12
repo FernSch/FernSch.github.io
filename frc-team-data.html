@@ -1,76 +1,76 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>FRC Team Data Card Generator</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>FRC Team Data Card Generator</h1>
-    <h2>Generate a Data card for an FRC team, based on Statbotics</h2>
-    <form>
-      <label for="team_num_data">Team Number:</label>
-      <input type="text" id="team_num_data" name="team_num_data"><br><br>
-      <input type="submit" value="Submit">
-    </form>
-    <div id="team-data-card"></div>
-    <script>
-      const teamNumData = document.getElementById('team_num_data');
-      const teamDataCard = document.getElementById('team-data-card');
+<head>
+	<title>FRC Team Data Card Generator</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<h1>FRC Team Data Card Generator</h1>
+	<h2>Generate a Data card for an FRC team, based on statbotics</h2>
+	<form id="team-form">
+		<label for="team_num_data">Enter FRC Team Number (1-9999): </label>
+		<input type="number" name="team_num" id="team_num_data" min="1" max="9999" required>
+		<button type="submit">Generate</button>
+	</form>
+	<div id="card"></div>
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const teamNum = urlParams.get('team');
-      if (teamNum) {
-        teamNumData.value = teamNum;
-        getTeamData(teamNum);
-      }
+	<script>
+		const teamForm = document.getElementById("team-form");
+		const cardContainer = document.getElementById("card");
 
-      function getTeamData(team) {
-        fetch(`https://api.statbotics.io/v2/team/${team}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.error) {
-              teamDataCard.innerText = data.error;
-              return;
-            }
-            const { name, country, rookie_year, winrate } = data.team;
-            const fullWinrate = `${(winrate * 100).toFixed(2)}%`;
-            const img = generateTeamCard(name, team, country, rookie_year, fullWinrate);
-            teamDataCard.innerHTML = '';
-            teamDataCard.appendChild(img);
-          })
-          .catch(error => {
-            teamDataCard.innerText = `Error: ${error.message}`;
-          });
-      }
+		teamForm.addEventListener("submit", e => {
+			e.preventDefault();
+			const teamNumber = document.getElementById("team_num_data").value;
 
-      function generateTeamCard(name, team, country, rookie_year, fullWinrate) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 900;
-        canvas.height = 300;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#FFF';
-        ctx.font = 'bold 70px Arial';
-        ctx.fillText(`${name} ${team}`, 50, 100);
-        ctx.font = '30px Arial';
-        ctx.fillText(`Country: ${country}`, 50, 200);
-        ctx.fillText(`Rookie Year: ${rookie_year}`, 50, 240);
-        ctx.fillText(`Full Winrate: ${fullWinrate}`, 50, 280);
-        const img = document.createElement('img');
-        img.src = canvas.toDataURL();
-        img.alt = `${name} ${team}`;
-        return img;
-      }
+			fetch(`https://api.statbotics.io/v2/team/${teamNumber}`)
+				.then(response => response.json())
+				.then(data => {
+					if (data.name === undefined) {
+						alert("Invalid Team Number!");
+						return;
+					}
 
-      const form = document.querySelector('form');
-      form.addEventListener('submit', event => {
-        event.preventDefault();
-        const team = teamNumData.value;
-        const params = new URLSearchParams({ team });
-        history.pushState(null, '', `?${params.toString()}`);
-        getTeamData(team);
-      });
-    </script>
-  </body>
-</html>
+					const cardContent = `
+						<div class="card" style="background-color: ${getRandomPastelColor()}">
+							<div class="card-text">
+								<h2>${data.name}</h2>
+								<h3>Team ${data.team_number}</h3>
+								<p>${data.country}<br>
+								Rookie Year: ${data.rookie_year}<br>
+								Win Rate: ${data.stats.wins} - ${data.stats.losses} - ${data.stats.ties} (${((data.stats.wins / (data.stats.wins + data.stats.losses + data.stats.ties)) * 100).toFixed(2)}%)</p>
+							</div>
+						</div>
+					`;
+
+					cardContainer.innerHTML = cardContent;
+					createImage(data.name, data.team_number, data.country, data.rookie_year, data.stats);
+				})
+				.catch(error => {
+					console.error("Error fetching team data:", error);
+				});
+		});
+
+		function getRandomPastelColor() {
+			const letters = '0123456789ABCDEF';
+			let color = '#';
+			for (let i = 0; i < 3; i++) {
+				color += letters[Math.floor(Math.random() * 8) + 8];
+			}
+			return color;
+		}
+
+		function createImage(name, number, country, rookieYear, stats) {
+			const canvas = document.createElement("canvas");
+			canvas.width = 900;
+			canvas.height = 300;
+			const context = canvas.getContext("2d");
+			context.fillStyle = getRandomPastelColor();
+			context.fillRect(0, 0, canvas.width, canvas.height);
+			context.fillStyle = "#000";
+			context.font = "bold 60px Arial";
+			context.fillText(name, 50, 100);
+			context.font = "bold 40px Arial";
+			context.fillText(`Team ${number}`, 50, 170);
+			context.font = "20px Arial";
+			context.fillText(`${country} - Rookie Year: ${rookieYear}`, 50, 220);
+			context.fillText(`Win Rate: ${stats.wins} - ${stats.losses} - ${stats.ties} (${((stats.wins / (stats.wins + stats.losses + stats.ties)) * 100).
