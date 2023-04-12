@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>FRC Team Data Card Generator</title>
+    <title>FRC Team Data Card Generator</title>\
+    <link rel="stylesheet" href="style.css">
     <style>
       /* Fancy styles for the submit button */
       #team_num_data {
@@ -25,6 +26,8 @@
     </style>
   </head>
   <body>
+    
+    <center>
     <h1>FRC Team Data Card Generator</h1>
     <h2>Generate a Data card for an FRC team, based on statbotics</h2>
     <form>
@@ -32,6 +35,7 @@
       <input type="number" id="team_num_data" name="team_number" required>
       <input type="submit" value="Generate Data Card">
     </form>
+    </center>
     <script>
 const form = document.querySelector("form");
 const apiUrl = "https://api.statbotics.io/v2/team/";
