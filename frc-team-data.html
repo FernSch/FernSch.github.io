@@ -2,42 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>frc team data</title>
-    <link rel="stylesheet" href="style.css">
+    <title>FRC Team Data Card Generator</title>
+    <style>
+      /* Fancy styles for the submit button */
+      #team_num_data {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2em;
+        cursor: pointer;
+      }
 
-    
+      #team_num_data:hover {
+        background-color: #0062cc;
+      }
+
+      #team_num_data:active {
+        background-color: #005cbf;
+      }
+    </style>
   </head>
   <body>
-	  
-
-
-	<script src="index.js"></script>
-	  <center>
-  <h1 style="color: white;">FRC Team Data Card Generator</h1>
-		  <h2 style="color: white;">Generate a Data card for an FRC team, based on statbotics</h2>
-	  <center>
-		  <form id="team_form"onsumbit="return false">
-		  <input type="number" min=1 max=9999>
-			  <input type="submit" "value="Submit" label="team number" id="team_num_data">
-			  <form>
-				  
-	<script>
-		
-const form = document.querySelector("#team_num_data");
+    <h1>FRC Team Data Card Generator</h1>
+    <h2>Generate a Data card for an FRC team, based on statbotics</h2>
+    <form>
+      <label for="team_number">Enter a team number:</label>
+      <input type="number" id="team_num_data" name="team_number" required>
+      <input type="submit" value="Generate Data Card">
+    </form>
+    <script>
+const form = document.querySelector("form");
 const apiUrl = "https://api.statbotics.io/v2/team/";
 
 form.addEventListener("submit", function(event) {
   event.preventDefault();
-  const teamNumber = form.value;
+  const teamNumber = form.elements["team_number"].value;
   const url = apiUrl + teamNumber;
-  
+
   fetch(url)
     .then(response => response.json())
     .then(data => {
-      // Do something with the JSON data
-      console.log(data);
+      // Show the JSON data in a window alert
+      window.alert(JSON.stringify(data));
     })
     .catch(error => {
       // Handle any errors that occurred during the fetch
@@ -45,9 +53,6 @@ form.addEventListener("submit", function(event) {
     });
 });
 
-
-				  </script>
-				  
-			  
+    </script>
   </body>
 </html>
