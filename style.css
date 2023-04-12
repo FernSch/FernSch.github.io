@@ -162,3 +162,24 @@ body {
          -o-transform: rotate(-.50turn);
             transform: rotate(-.50turn);
 }
+
+.big-rat
+{
+	height: 300px;
+}
+.frc_but
+{
+	border-radius: 15px;
+	background-color: black;
+	color: white;
+}
+.frc_but:hover
+{
+	background-color: white;
+	color: black;
+	transition: 300ms;
+}
+		
+		
+		
+		
