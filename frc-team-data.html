@@ -26,7 +26,14 @@
 
         // Construct the API URL and fetch the team data
         const apiUrl = "https://api.statbotics.io/v2/team/";
-        const url = apiUrl + teamNumber;
+        let url = apiUrl + teamNumber;
+
+        // Check if the "year" variable is present in the URL
+        const year = urlParams.get('year');
+        if (year) {
+          url += '/' + year;
+        }
+
         fetch(url)
           .then(response => response.json())
           .then(data => {
