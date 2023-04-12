@@ -1,76 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>FRC Team Data Card Generator</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-	<h1>FRC Team Data Card Generator</h1>
-	<h2>Generate a Data card for an FRC team, based on statbotics</h2>
-	<form id="team-form">
-		<label for="team_num_data">Enter FRC Team Number (1-9999): </label>
-		<input type="number" name="team_num" id="team_num_data" min="1" max="9999" required>
-		<button type="submit">Generate</button>
-	</form>
-	<div id="card"></div>
+  <head>
+    <title>FRC Team Data Card Generator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+      function generateCard() {
+        const teamNum = document.getElementById("team_num_data").value;
+        const apiUrl = `https://api.statbotics.io/v2/team/${teamNum}`;
 
-	<script>
-		const teamForm = document.getElementById("team-form");
-		const cardContainer = document.getElementById("card");
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            const canvas = document.getElementById("team_card");
+            canvas.height = 300;
+            canvas.width = 900;
+            const ctx = canvas.getContext("2d");
+            const bgColor = generateRandomPastelColor();
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#000000";
+            ctx.font = "bold 64px Arial";
+            const teamName = data["name"];
+            const teamNumber = data["number"];
+            const country = data["country"];
+            const rookieYear = data["rookie_year"];
+            const winRate = data["wins"] / data["total_matches"] * 100;
+            const fullWinRate = `${winRate.toFixed(2)}%`;
+            ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
+            ctx.font = "bold 32px Arial";
+            ctx.fillText(`Country: ${country}`, 30, 160);
+            ctx.fillText(`Rookie Year: ${rookieYear}`, 30, 200);
+            ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
+            const img = canvas.toDataURL("image/png");
+            const imgElem = document.createElement("img");
+            imgElem.src = img;
+            imgElem.alt = `${teamName} ${teamNumber} Card`;
+            imgElem.width = 900;
+            imgElem.height = 300;
+            const cardContainer = document.getElementById("team_card_container");
+            cardContainer.innerHTML = "";
+            cardContainer.appendChild(imgElem);
+          })
+          .catch(error => {
+            alert("Error fetching team data. Please check the team number and try again.");
+            console.error(error);
+          });
+      }
 
-		teamForm.addEventListener("submit", e => {
-			e.preventDefault();
-			const teamNumber = document.getElementById("team_num_data").value;
-
-			fetch(`https://api.statbotics.io/v2/team/${teamNumber}`)
-				.then(response => response.json())
-				.then(data => {
-					if (data.name === undefined) {
-						alert("Invalid Team Number!");
-						return;
-					}
-
-					const cardContent = `
-						<div class="card" style="background-color: ${getRandomPastelColor()}">
-							<div class="card-text">
-								<h2>${data.name}</h2>
-								<h3>Team ${data.team_number}</h3>
-								<p>${data.country}<br>
-								Rookie Year: ${data.rookie_year}<br>
-								Win Rate: ${data.stats.wins} - ${data.stats.losses} - ${data.stats.ties} (${((data.stats.wins / (data.stats.wins + data.stats.losses + data.stats.ties)) * 100).toFixed(2)}%)</p>
-							</div>
-						</div>
-					`;
-
-					cardContainer.innerHTML = cardContent;
-					createImage(data.name, data.team_number, data.country, data.rookie_year, data.stats);
-				})
-				.catch(error => {
-					console.error("Error fetching team data:", error);
-				});
-		});
-
-		function getRandomPastelColor() {
-			const letters = '0123456789ABCDEF';
-			let color = '#';
-			for (let i = 0; i < 3; i++) {
-				color += letters[Math.floor(Math.random() * 8) + 8];
-			}
-			return color;
-		}
-
-		function createImage(name, number, country, rookieYear, stats) {
-			const canvas = document.createElement("canvas");
-			canvas.width = 900;
-			canvas.height = 300;
-			const context = canvas.getContext("2d");
-			context.fillStyle = getRandomPastelColor();
-			context.fillRect(0, 0, canvas.width, canvas.height);
-			context.fillStyle = "#000";
-			context.font = "bold 60px Arial";
-			context.fillText(name, 50, 100);
-			context.font = "bold 40px Arial";
-			context.fillText(`Team ${number}`, 50, 170);
-			context.font = "20px Arial";
-			context.fillText(`${country} - Rookie Year: ${rookieYear}`, 50, 220);
-			context.fillText(`Win Rate: ${stats.wins} - ${stats.losses} - ${stats.ties} (${((stats.wins / (stats.wins + stats.losses + stats.ties)) * 100).
+      function generateRandomPastelColor() {
+        const hue = Math.floor(Math.random() * 360);
+        const pastel = `hsl(${hue}, 100%, 85%)`;
+        return pastel;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>FRC Team Data Card Generator</h1>
+    <h2>Generate a Data card for an FRC team, based on statbotics</h2>
+    <form onsubmit="event.preventDefault(); generateCard();">
+      <label for="team_num_data">Team Number (1-9999):</label>
+      <input type="number" id="team_num_data" name="team_num_data" min="1" max="9999" required>
+      <input type="submit" value="Generate">
+    </form>
+    <div id="team_card_container"></div>
+    <canvas id="team_card"></canvas>
+  </body>
+</html>
