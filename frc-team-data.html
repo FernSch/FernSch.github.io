@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <title>FRC Team Data Card Generator</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+      #team-image {
+        background-color: black;
+        color: white;
+        font-size: 2em;
+        text-align: center;
+        padding: 1em;
+        width: 30%;
+        margin: auto;
+      }
+    </style>
   </head>
   <body>
     <h1>FRC Team Data Card Generator</h1>
@@ -14,6 +25,7 @@
       <button type="submit">Submit</button>
     </form>
     <div id="team-data"></div>
+    <div id="team-image"></div>
     <script>
       const form = document.getElementById('team-form');
 
@@ -38,6 +50,17 @@
 
             teamDataDiv.innerHTML = '';
             teamDataDiv.appendChild(list);
+
+            const teamImageDiv = document.getElementById('team-image');
+            const teamName = data.team_name;
+            const teamNumber = data.team_number;
+            const country = data.country;
+            const rookieYear = data.rookie_year;
+            const fullWinRate = data.full_win_rate;
+            const teamImage = document.createElement('div');
+            teamImage.textContent = `${teamName} ${teamNumber}\n${country}, Rookie Year: ${rookieYear}, Full Win Rate: ${fullWinRate}`;
+            teamImageDiv.innerHTML = '';
+            teamImageDiv.appendChild(teamImage);
           })
           .catch(error => console.error(error));
       });
