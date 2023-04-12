@@ -1,47 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <title>FRC Team Data Card Generator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>FRC Team Data Card Generator</h1>
-    <h2>Generate a Data card for an FRC team, based on statbotics</h2>
-    <form>
-      <label for="team_num_data">Team Number:</label>
-      <input type="text" id="team_num_data" name="team_num_data" required>
-      <button type="submit">Submit</button>
-    </form>
-    <div id="team-data"></div>
+    <h2>Team <span id="team_number"></span> Information</h2>
+    <ul id="team_data"></ul>
+    
     <script>
+      // Get the value of the "team" variable from the URL
       const urlParams = new URLSearchParams(window.location.search);
-      const teamNum = urlParams.get('team');
+      const teamNumber = urlParams.get('team');
 
-      if (!teamNum) {
-        const errorDiv = document.createElement('div');
-        errorDiv.textContent = 'You must pass in a team number through the URL in the format: FernSch.github.io/frc-team-data?team={team}';
-        document.body.appendChild(errorDiv);
-      } else {
-        const apiUrl = `https://api.statbotics.io/v2/team/${teamNum}`;
+      // Update the HTML with the team number
+      const teamNumberSpan = document.getElementById("team_number");
+      teamNumberSpan.textContent = teamNumber;
 
-        fetch(apiUrl)
-          .then(response => response.json())
-          .then(data => {
-            const teamDataDiv = document.getElementById('team-data');
-            const list = document.createElement('ul');
-
-            for (const [key, value] of Object.entries(data)) {
-              const listItem = document.createElement('li');
-              const formattedKey = key.replace('_', ' ');
-              listItem.textContent = `${formattedKey}: ${value}`;
-              list.appendChild(listItem);
-            }
-
-            teamDataDiv.appendChild(list);
-          })
-          .catch(error => console.error(error));
-      }
+      // Construct the API URL and fetch the team data
+      const apiUrl = "https://api.statbotics.io/v2/team/";
+      const url = apiUrl + teamNumber;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          // Update the HTML with the team data
+          const teamDataList = document.getElementById("team_data");
+          Object.entries(data).forEach(([key, value]) => {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = "<strong>" + key + ":</strong> " + value;
+            teamDataList.appendChild(listItem);
+          });
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the fetch
+          console.error(error);
+        });
     </script>
   </body>
 </html>
