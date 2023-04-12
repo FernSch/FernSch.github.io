@@ -25,7 +25,7 @@
             const rookieYear = data["rookie_year"];
             const fullWinRate = (Math.round((data['full_winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";
 		       
-		if (teamNumber == "undefined" )
+		if (data.length() == 0)
 		{
 		
 			teamNumber = "Team Not Found!";
