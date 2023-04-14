@@ -5,39 +5,80 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script>
       function generateCard() {
+	 
         const teamNum = document.getElementById("team_num_data").value;
-        const apiUrl = `https://api.statbotics.io/v2/team/${teamNum}`;
-	       fetch(apiUrl)
-          .then(response => response.json())
-          .then(data => {
-            const canvas = document.getElementById("team_card");
-            canvas.height = 300;
-            canvas.width = 900;
-            const ctx = canvas.getContext("2d");
-            const bgColor = generateRandomPastelColor();
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#000000";
-            ctx.font = "bold 64px Arial";
-            const teamName = data["name"];
-            const teamNumber = data["team"];
-            const country = data["country"];
-            const rookieYear = data["rookie_year"];
-            const fullWinRate = (Math.round((data['full_winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";	       
-            ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
-            ctx.font = "bold 32px Arial";
-            ctx.fillText(`Country: ${country}`, 30, 160);
-            ctx.fillText(`Rookie Year: ${rookieYear}`, 30, 200);
-            ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
-            const img = canvas.toDataURL("image/png");
-            const imgElem = document.createElement("img");
-            imgElem.src = img;
-            imgElem.alt = `${teamName} ${teamNumber} Card`;
-            imgElem.width = 900;
-            imgElem.height = 300;
-            const cardContainer = document.getElementById("team_card_container");
-            cardContainer.innerHTML = "";
-            //cardContainer.appendChild(imgElem);
+	 if (document.getElementById('year_check').checked)
+	{
+		int year = Year.now().getValue();
+		const apiUrl2 = `https://api.statbotics.io/v2/team_year/${teamNum}/${year}`;	
+		feth(apiUrl2)
+		.then(reponse => response.json())
+		.then(data2 => {
+			const canvas = document.getElementById("team_card");
+		    canvas.height = 300;
+		    canvas.width = 900;
+		    const ctx = canvas.getContext("2d");
+		    const bgColor = generateRandomPastelColor();
+		    ctx.fillStyle = bgColor;
+		    ctx.fillRect(0, 0, canvas.width, canvas.height);
+		    ctx.fillStyle = "#000000";
+		    ctx.font = "bold 64px Arial";
+		    const teamName = data["name"];
+		    const teamNumber = data["team"];
+		    const country = data["country"];
+		    const rank = data["country_epa_rank"];
+		    const fullWinRate = (Math.round((data['winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";	       
+		    ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
+		    ctx.font = "bold 32px Arial";
+		    ctx.fillText(`Country: ${country}`, 30, 160);
+		    ctx.fillText(`rank: ${rank}`, 30, 200);
+		    ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
+		    const img = canvas.toDataURL("image/png");
+		    const imgElem = document.createElement("img");
+		    imgElem.src = img;
+		    imgElem.alt = `${teamName} ${teamNumber} Card`;
+		    imgElem.width = 900;
+		    imgElem.height = 300;
+		    const cardContainer = document.getElementById("team_card_container");
+		    cardContainer.innerHTML = "";
+		    //cardContainer.appendChild(imgElem);
+		}
+	}
+	else
+		      {
+		const apiUrl1 = `https://api.statbotics.io/v2/team/${teamNum}`;
+		       fetch(apiUrl1)
+		  .then(response => response.json())
+		  .then(data => {
+		    const canvas = document.getElementById("team_card");
+		    canvas.height = 300;
+		    canvas.width = 900;
+		    const ctx = canvas.getContext("2d");
+		    const bgColor = generateRandomPastelColor();
+		    ctx.fillStyle = bgColor;
+		    ctx.fillRect(0, 0, canvas.width, canvas.height);
+		    ctx.fillStyle = "#000000";
+		    ctx.font = "bold 64px Arial";
+		    const teamName = data["name"];
+		    const teamNumber = data["team"];
+		    const country = data["country"];
+		    const rookieYear = data["rookie_year"];
+		    const fullWinRate = (Math.round((data['full_winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";	       
+		    ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
+		    ctx.font = "bold 32px Arial";
+		    ctx.fillText(`Country: ${country}`, 30, 160);
+		    ctx.fillText(`Rookie Year: ${rookieYear}`, 30, 200);
+		    ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
+		    const img = canvas.toDataURL("image/png");
+		    const imgElem = document.createElement("img");
+		    imgElem.src = img;
+		    imgElem.alt = `${teamName} ${teamNumber} Card`;
+		    imgElem.width = 900;
+		    imgElem.height = 300;
+		    const cardContainer = document.getElementById("team_card_container");
+		    cardContainer.innerHTML = "";
+		    //cardContainer.appendChild(imgElem);
+	    }
           })
           .catch(error => {
             alert("Error fetching team data. Please check the team number and try again.");
