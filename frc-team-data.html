@@ -67,7 +67,10 @@
     <form onsubmit="event.preventDefault(); generateCard();">
       <label for="team_num_data">Team Number (1-9999):</label>
       <input type="number" id="team_num_data" name="team_num_data" min="1" max="9999" required>
+	   <input type="checkbox" id="year_check" name="year_check" value="Year">
+  <label for="year_check">year specific data</label><br>
       <input type="submit" value="Generate" id="team_num_data_button">
+
     </form>
     <div id="team_card_container"></div>
     <canvas id="team_card"></canvas>
