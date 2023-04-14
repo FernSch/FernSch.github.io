@@ -1,119 +1,82 @@
-<!DOCTYPE html>
-<html>  
-<head>
-    <title>FRC Team Data Card Generator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script>
-      function generateCard() {
-	 
-        const teamNum = document.getElementById("team_num_data").value;
-	 if (document.getElementById('year_check').checked)
-	{
-		int year = Year.now().getValue();
-		const apiUrl2 = `https://api.statbotics.io/v2/team_year/${teamNum}/${year}`;	
-		feth(apiUrl2)
-		.then(reponse => response.json())
-		.then(data2 => {
-			const canvas = document.getElementById("team_card");
-		    canvas.height = 300;
-		    canvas.width = 900;
-		    const ctx = canvas.getContext("2d");
-		    const bgColor = generateRandomPastelColor();
-		    ctx.fillStyle = bgColor;
-		    ctx.fillRect(0, 0, canvas.width, canvas.height);
-		    ctx.fillStyle = "#000000";
-		    ctx.font = "bold 64px Arial";
-		    const teamName = data["name"];
-		    const teamNumber = data["team"];
-		    const country = data["country"];
-		    const rank = data["country_epa_rank"];
-		    const fullWinRate = (Math.round((data['winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";	       
-		    ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
-		    ctx.font = "bold 32px Arial";
-		    ctx.fillText(`Country: ${country}`, 30, 160);
-		    ctx.fillText(`rank: ${rank}`, 30, 200);
-		    ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
-		    const img = canvas.toDataURL("image/png");
-		    const imgElem = document.createElement("img");
-		    imgElem.src = img;
-		    imgElem.alt = `${teamName} ${teamNumber} Card`;
-		    imgElem.width = 900;
-		    imgElem.height = 300;
-		    const cardContainer = document.getElementById("team_card_container");
-		    cardContainer.innerHTML = "";
-		    //cardContainer.appendChild(imgElem);
-		}
-	}
-	else
-		      {
-		const apiUrl1 = `https://api.statbotics.io/v2/team/${teamNum}`;
-		       fetch(apiUrl1)
-		  .then(response => response.json())
-		  .then(data => {
-		    const canvas = document.getElementById("team_card");
-		    canvas.height = 300;
-		    canvas.width = 900;
-		    const ctx = canvas.getContext("2d");
-		    const bgColor = generateRandomPastelColor();
-		    ctx.fillStyle = bgColor;
-		    ctx.fillRect(0, 0, canvas.width, canvas.height);
-		    ctx.fillStyle = "#000000";
-		    ctx.font = "bold 64px Arial";
-		    const teamName = data["name"];
-		    const teamNumber = data["team"];
-		    const country = data["country"];
-		    const rookieYear = data["rookie_year"];
-		    const fullWinRate = (Math.round((data['full_winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";	       
-		    ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
-		    ctx.font = "bold 32px Arial";
-		    ctx.fillText(`Country: ${country}`, 30, 160);
-		    ctx.fillText(`Rookie Year: ${rookieYear}`, 30, 200);
-		    ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
-		    const img = canvas.toDataURL("image/png");
-		    const imgElem = document.createElement("img");
-		    imgElem.src = img;
-		    imgElem.alt = `${teamName} ${teamNumber} Card`;
-		    imgElem.width = 900;
-		    imgElem.height = 300;
-		    const cardContainer = document.getElementById("team_card_container");
-		    cardContainer.innerHTML = "";
-		    //cardContainer.appendChild(imgElem);
-	    }
-          })
-          .catch(error => {
-            alert("Error fetching team data. Please check the team number and try again.");
-            console.error(error);
-          });
-      }
-	    function generateRandomPastelColor() {
-        const hue = Math.floor(Math.random() * 360);
-        const pastel = `hsl(${hue}, 100%, 85%)`;
-        return pastel;
-      }
-    </script>
-	<style>
-		.team_num_data_button {
-			border-radius: 15px;
-			color: white;
-			
-		}
-		
-		
-		
-	</style>
-  </head>
-  <body>
-    <h1>FRC Team Data Card Generator</h1>
-    <h2>Generate a Data card for an FRC team, based on statbotics</h2>
-    <form onsubmit="event.preventDefault(); generateCard();">
-      <label for="team_num_data">Team Number (1-9999):</label>
-      <input type="number" id="team_num_data" name="team_num_data" min="1" max="9999" required>
-	   <input type="checkbox" id="year_check" name="year_check" value="Year">
-  <label for="year_check">year specific data</label><br>
-      <input type="submit" value="Generate" id="team_num_data_button">
 
-    </form>
-    <div id="team_card_container"></div>
-    <canvas id="team_card"></canvas>
-  </body>
-</html>
+function generateCard() {
+ 
+  const teamNum = document.getElementById("team_num_data").value;
+  if (document.getElementById('year_check').checked) {
+    var current_year = document.getElementById('year');
+    const apiUrl2 = `https://api.statbotics.io/v2/team_year/${teamNum}/${current_year}`;
+    fetch(apiUrl2)
+      .then(response => response.json())
+      .then(data2 => {
+        const canvas = document.getElementById("team_card_container");
+        canvas.height = 300;
+        canvas.width = 900;
+        const ctx = canvas.getContext("2d");
+        const bgColor = generateRandomPastelColor();
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold 64px Arial";
+        const teamName = data2["name"];
+        const teamNumber = data2["team"];
+        const country = data2["country"];
+        const rank = data2["country_epa_rank"];
+        const fullWinRate = (Math.round((data2['winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";
+        ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
+        ctx.font = "bold 32px Arial";
+        ctx.fillText(`Country: ${country}`, 30, 160);
+        ctx.fillText(`rank: ${rank}`, 30, 200);
+        ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
+        const img = canvas.toDataURL("image/png");
+        const imgElem = document.createElement("img");
+        imgElem.src = img;
+        imgElem.alt = `${teamName} ${teamNumber} Card`;
+        imgElem.width = 900;
+        imgElem.height = 300;
+        const cardContainer = document.getElementById("team_card_container");
+        cardContainer.innerHTML = "";
+        //cardContainer.appendChild(imgElem);
+      }
+	)}
+  else {
+    const apiUrl1 = `https://api.statbotics.io/v2/team/${teamNum}`;
+    fetch(apiUrl1)
+      .then(response => response.json())
+      .then(data => {
+        const canvas = document.getElementById("team_card");
+        canvas.height = 300;
+        canvas.width = 900;
+        const ctx = canvas.getContext("2d");
+        const bgColor = generateRandomPastelColor();
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold 64px Arial";
+        const teamName = data["name"];
+        const teamNumber = data["team"];
+        const country = data["country"];
+        const rookieYear = data["rookie_year"];
+        const fullWinRate = (Math.round((data['full_winrate'] * 100 + Number.EPSILON) * 100) / 100).toString() + "%";
+        ctx.fillText(`${teamName} ${teamNumber}`, 30, 100);
+        ctx.font = "bold 32px Arial";
+        ctx.fillText(`Country: ${country}`, 30, 160);
+        ctx.fillText(`Rookie Year: ${rookieYear}`, 30, 200);
+        ctx.fillText(`Full Winrate: ${fullWinRate}`, 30, 240);
+        const img = canvas.toDataURL("image/png");
+        const imgElem = document.createElement("img");
+        imgElem.src = img;
+        imgElem.alt = `${teamName} ${teamNumber} Card`;
+        imgElem.width = 900;
+        imgElem.height = 300;
+        const cardContainer = document.getElementById("team_card_container");
+        cardContainer.innerHTML = "";
+        //cardContainer.appendChild(imgElem);
+      }
+          )}
+
+}
+function generateRandomPastelColor() {
+  const hue = Math.floor(Math.random() * 360);
+  const pastel = `hsl(${hue}, 100%, 85%)`;
+  return pastel;
+}
